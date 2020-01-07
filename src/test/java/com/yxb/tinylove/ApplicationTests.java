@@ -4,10 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TinyLoveApplicationTests {
+class ApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println(11111);
     }
 
 }
