@@ -1,0 +1,32 @@
+server:
+  port: 9999
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.36.34:3306/tiny_love?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 122733
+    type: com.zaxxer.hikari.HikariDataSource
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
+
+logging:
+  level:
+    com.xdja: debug
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.yxb.*.domain
+  global-config:
+    db-config:
+      id-type: uuid
+  configuration:
+    cache-enabled: false
+
+app:
+  version: @project.version@
+  build:
+    time: @timestamp@
