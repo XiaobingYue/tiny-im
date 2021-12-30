@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.36.34:3306/tiny_love?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/tiny_love?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
-    password: 122733
+    password: 123456
     type: com.zaxxer.hikari.HikariDataSource
   servlet:
     multipart:
@@ -25,8 +25,3 @@ mybatis-plus:
       id-type: uuid
   configuration:
     cache-enabled: false
-
-app:
-  version: @project.version@
-  build:
-    time: @timestamp@

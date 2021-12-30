@@ -75,6 +75,12 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.12</version>
         </dependency>
+
+        <!--netty的依赖集合，都整合在一个依赖里面了-->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

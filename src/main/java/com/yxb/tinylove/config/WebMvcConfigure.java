@@ -3,6 +3,8 @@ package com.yxb.tinylove.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.yxb.tinylove.netty.NettyServerListener;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -11,6 +13,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.Collections;
@@ -22,20 +25,18 @@ import java.util.List;
  */
 @Configuration
 @EnableWebMvc
-public class WebMvcConfigure extends WebMvcConfigurerAdapter {
+public class WebMvcConfigure implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        super.configureMessageConverters(converters);
         converters.add(jsonConverter());
         converters.add(stringConverter());
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/templates/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"/templates/");
-        registry.addResourceHandler("/static/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"/static/");
-        super.addResourceHandlers(registry);
+        registry.addResourceHandler("/templates/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + "/templates/");
+        registry.addResourceHandler("/static/**").addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + "/static/");
     }
 
     @Bean
@@ -53,5 +54,12 @@ public class WebMvcConfigure extends WebMvcConfigurerAdapter {
         StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
         stringConverter.setSupportedMediaTypes(Collections.singletonList(MediaType.TEXT_PLAIN));
         return stringConverter;
+    }
+
+    @Bean(name = "nettyServerListener")
+    public ServletListenerRegistrationBean<NettyServerListener> nettyServerListener() {
+        ServletListenerRegistrationBean<NettyServerListener> srb = new ServletListenerRegistrationBean<>();
+        srb.setListener(new NettyServerListener());
+        return srb;
     }
 }
