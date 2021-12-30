@@ -1,7 +1,10 @@
 package com.yxb.tinylove.netty.protocol.resp;
 
+import com.yxb.tinylove.common.bean.Session;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author yxb
@@ -10,17 +13,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class MsgResp {
-
-    private String userId;
-
-    private String msg;
-
-    private String username;
-
-    private String avatar;
-
-    private String time;
+public class OnlineListResp {
 
     private Integer type;
+
+    private List<Session> userList;
 }

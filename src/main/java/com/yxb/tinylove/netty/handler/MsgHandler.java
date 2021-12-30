@@ -20,7 +20,7 @@ public class MsgHandler extends AbstractHandler {
         MsgRequest msgRequest = JSON.toJavaObject(req, MsgRequest.class);
         Session session = SessionUtil.getSession(channel);
         Channel toChannel = SessionUtil.getChannel(msgRequest.getToUserId());
-        MsgResp msgResp = MsgResp.builder().msg(msgRequest.getMessage()).userId(session.getUserId()).username(session.getUsername()).time("").build();
+        MsgResp msgResp = MsgResp.builder().msg(msgRequest.getMessage()).userId(session.getUserId()).username(session.getUsername()).time("").type(2).build();
         toChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(msgResp)));
     }
 }
