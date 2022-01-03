@@ -7,6 +7,7 @@ import com.yxb.tinylove.common.util.SessionUtil;
 import com.yxb.tinylove.common.util.UUIDUtil;
 import com.yxb.tinylove.domain.User;
 import com.yxb.tinylove.netty.handler.AbstractHandler;
+import com.yxb.tinylove.netty.handler.GetCurrentLoginUser;
 import com.yxb.tinylove.netty.handler.MsgHandler;
 import com.yxb.tinylove.netty.handler.OnlineUserListHandler;
 import io.netty.buffer.ByteBuf;
@@ -24,6 +25,7 @@ import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import static io.netty.handler.codec.http.HttpUtil.isKeepAlive;
@@ -37,11 +39,13 @@ public class WsHandler extends SimpleChannelInboundHandler<Object> {
 
     private WebSocketServerHandshaker handShaker;
 
-    private Map<Integer, AbstractHandler> handlerMap;
+    private final Map<Integer, AbstractHandler> handlerMap;
 
     public WsHandler() {
+        handlerMap = new HashMap<>();
         handlerMap.put(1, new OnlineUserListHandler());
         handlerMap.put(2, new MsgHandler());
+        handlerMap.put(3, new GetCurrentLoginUser());
     }
 
     @Override
