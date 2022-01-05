@@ -1,15 +1,14 @@
 package com.yxb.tinylove.netty;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yxb.tinylove.common.bean.Session;
 import com.yxb.tinylove.common.util.RandomNicknameUtil;
 import com.yxb.tinylove.common.util.SessionUtil;
 import com.yxb.tinylove.common.util.UUIDUtil;
 import com.yxb.tinylove.domain.User;
-import com.yxb.tinylove.netty.handler.AbstractHandler;
-import com.yxb.tinylove.netty.handler.GetCurrentLoginUser;
-import com.yxb.tinylove.netty.handler.MsgHandler;
-import com.yxb.tinylove.netty.handler.OnlineUserListHandler;
+import com.yxb.tinylove.netty.handler.*;
+import com.yxb.tinylove.netty.protocol.resp.LoginUser;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -24,9 +23,7 @@ import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static io.netty.handler.codec.http.HttpUtil.isKeepAlive;
 
@@ -46,6 +43,7 @@ public class WsHandler extends SimpleChannelInboundHandler<Object> {
         handlerMap.put(1, new OnlineUserListHandler());
         handlerMap.put(2, new MsgHandler());
         handlerMap.put(3, new GetCurrentLoginUser());
+        handlerMap.put(6, new PingHandler());
     }
 
     @Override
@@ -64,16 +62,25 @@ public class WsHandler extends SimpleChannelInboundHandler<Object> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         //添加连接
         log.debug("客户端加入连接：" + ctx.channel());
-        Session session = Session.builder().userId(UUIDUtil.randomUUID()).username(RandomNicknameUtil.getNickname()).build();
+        Session session = Session.builder().userId(UUIDUtil.randomUUID())
+                .username(RandomNicknameUtil.getNickname())
+                .avatarIndex(new Random().nextInt(14))
+                .chatMessageList(new ArrayList<>()).build();
         SessionUtil.addOnlineUser(session, ctx.channel());
-
+        LoginUser loginUser = LoginUser.builder().loginUser(session).type(4).build();
+        TextWebSocketFrame frame = new TextWebSocketFrame(JSON.toJSONString(loginUser));
+        SessionUtil.send2All(frame);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         //断开连接
         log.debug("客户端断开连接：" + ctx.channel());
+        Session session = SessionUtil.getSession(ctx.channel());
         SessionUtil.delOnlineUser(ctx.channel());
+        LoginUser loginUser = LoginUser.builder().loginUser(session).type(5).build();
+        TextWebSocketFrame frame = new TextWebSocketFrame(JSON.toJSONString(loginUser));
+        SessionUtil.send2All(frame);
     }
 
     @Override

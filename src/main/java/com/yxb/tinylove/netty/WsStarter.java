@@ -25,7 +25,7 @@ public class WsStarter {
     private NioEventLoopGroup work;
     private ChannelFuture channelFuture;
 
-    public void start() {
+    public void start(int port) {
         log.info("开始启动ws服务...");
         boss = new NioEventLoopGroup();
         work = new NioEventLoopGroup();
@@ -43,7 +43,7 @@ public class WsStarter {
                             socketChannel.pipeline().addLast("handler", new WsHandler());//自定义的业务handler;
                         }
                     });
-            channelFuture = bootstrap.bind(8088).sync();
+            channelFuture = bootstrap.bind(port).sync();
             log.info("ws服务启动完成...");
         } catch (Exception e) {
             log.error(e.getMessage(), e);

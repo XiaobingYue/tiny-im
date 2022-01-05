@@ -18,9 +18,22 @@ public class MsgResp {
 
     private String username;
 
+    private Integer avatarIndex;
+
     private String avatar;
 
     private String time;
 
     private Integer type;
+
+    private String toUsername;
+
+    private String toUserId;
+
+    /**
+     * 消息类型， 1-个人消息 2-群消息
+     */
+    private Integer msgType;
+
+    private String groupId;
 }

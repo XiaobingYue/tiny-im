@@ -15,7 +15,7 @@ public class OnlineUserListHandler extends AbstractHandler {
 
     @Override
     public void exec(Channel channel, JSONObject req) {
-        OnlineListResp onlineListResp = OnlineListResp.builder().userList(SessionUtil.onlineList()).type(1).build();
+        OnlineListResp onlineListResp = OnlineListResp.builder().userList(SessionUtil.onlineListExceptSelf(channel)).type(1).build();
         TextWebSocketFrame frame = new TextWebSocketFrame(JSON.toJSONString(onlineListResp));
         channel.writeAndFlush(frame);
     }

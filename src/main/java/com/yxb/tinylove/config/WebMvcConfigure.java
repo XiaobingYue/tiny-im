@@ -56,10 +56,10 @@ public class WebMvcConfigure implements WebMvcConfigurer {
         return stringConverter;
     }
 
-    @Bean(name = "nettyServerListener")
-    public ServletListenerRegistrationBean<NettyServerListener> nettyServerListener() {
+    @Bean
+    public ServletListenerRegistrationBean<NettyServerListener> serverListenerServletListenerRegistrationBean(NettyServerListener nettyServerListener) {
         ServletListenerRegistrationBean<NettyServerListener> srb = new ServletListenerRegistrationBean<>();
-        srb.setListener(new NettyServerListener());
+        srb.setListener(nettyServerListener);
         return srb;
     }
 }
