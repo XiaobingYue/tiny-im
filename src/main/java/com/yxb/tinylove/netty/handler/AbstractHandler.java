@@ -7,7 +7,6 @@ import lombok.Data;
 /**
  * @author yuexba
  */
-@Data
 public abstract class AbstractHandler {
 
     public abstract void exec(Channel channel, JSONObject req);

@@ -12,5 +12,5 @@ public class MsgRequest {
 
     private String message;
 
-    private String toUserId;
+    private Long toUserId;
 }

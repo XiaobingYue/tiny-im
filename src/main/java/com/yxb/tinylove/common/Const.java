@@ -6,7 +6,11 @@ package com.yxb.tinylove.common;
  */
 public class Const {
 
-    public static final int SUCCESS = 1;
+    public static final int SUCCESS = 200;
 
-    public static final int FAIL = 0;
+    public static final int FAIL = 500;
+
+    public static final int UN_LOGIN = 401;
+
+    public static final int PERMISSION_DENY = 403;
 }

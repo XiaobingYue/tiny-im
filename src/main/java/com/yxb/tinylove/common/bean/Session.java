@@ -12,11 +12,21 @@ import java.util.List;
 @Builder
 public class Session {
 
-    private String userId;
+    private Long userId;
 
     private String username;
 
+    private String nickname;
+
+    private Gender gender;
+
+    private String phoneNum;
+
     private Integer avatarIndex;
+
+    private String avatarUrl;
+
+    private String token;
 
     private List<String> chatMessageList;
 }

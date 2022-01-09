@@ -62,14 +62,6 @@ public class WsHandler extends SimpleChannelInboundHandler<Object> {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         //添加连接
         log.debug("客户端加入连接：" + ctx.channel());
-        Session session = Session.builder().userId(UUIDUtil.randomUUID())
-                .username(RandomNicknameUtil.getNickname())
-                .avatarIndex(new Random().nextInt(14))
-                .chatMessageList(new ArrayList<>()).build();
-        SessionUtil.addOnlineUser(session, ctx.channel());
-        LoginUser loginUser = LoginUser.builder().loginUser(session).type(4).build();
-        TextWebSocketFrame frame = new TextWebSocketFrame(JSON.toJSONString(loginUser));
-        SessionUtil.send2All(frame);
     }
 
     @Override

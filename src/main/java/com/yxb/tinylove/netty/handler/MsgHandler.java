@@ -21,9 +21,9 @@ public class MsgHandler extends AbstractHandler {
     @Override
     public void exec(Channel channel, JSONObject req) {
         MsgRequest msgRequest = JSON.toJavaObject(req, MsgRequest.class);
-        String toUserId = msgRequest.getToUserId();
+        Long toUserId = msgRequest.getToUserId();
         Session session = SessionUtil.getSession(channel);
-        if ("chatRoom".equals(toUserId)) {
+        if (toUserId == 0) {
             // 群发
             MsgResp msgResp = MsgResp.builder().msg(msgRequest.getMessage().replaceAll("\\n", "<br/>"))
                     .userId(session.getUserId())

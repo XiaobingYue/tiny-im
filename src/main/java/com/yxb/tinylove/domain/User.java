@@ -1,10 +1,12 @@
 package com.yxb.tinylove.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -31,20 +33,37 @@ public class User extends Model<User> {
     /**
      * 人员主键
      */
-    @TableId("id")
-    private String id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     /**
      * 人员名称
      */
-    @TableField("name")
-    private String name;
+    @TableField("username")
+    private String username;
 
+    @TableField("nickname")
+    private String nickname;
+
+    @TableField("password")
+    private String password;
+
+    @TableField("phone_num")
+    private String phoneNum;
+
+    @TableField("gender")
+    private Integer gender;
     /**
      * 人员头像地址
      */
     @TableField("avatar_url")
     private String avatarUrl;
+
+    private Integer state;
+
+    private Date createTime;
+
+    private Date updateTime;
 
 
     @Override

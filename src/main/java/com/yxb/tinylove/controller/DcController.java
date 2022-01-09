@@ -29,7 +29,7 @@ public class DcController {
     public Result<List<User>> dc() {
         List<User> list = userService.list();
         User user = userMapper.queryById("1");
-        log.debug(user.getName());
+        log.debug(user.getUsername());
         return Result.success(list);
     }
 }
