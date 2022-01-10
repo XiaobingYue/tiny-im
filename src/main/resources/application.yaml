@@ -4,9 +4,12 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://cloud.yxb.cool:9306/fxgmall?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-    username: house_service
-    password: house_123456
+#    url: jdbc:mysql://cloud.yxb.cool:9306/fxgmall?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/tiny_love?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+#    username: house_service
+#    password: house_123456
+    username: root
+    password: 123456
     type: com.zaxxer.hikari.HikariDataSource
   servlet:
     multipart:

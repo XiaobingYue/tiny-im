@@ -11,6 +11,7 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,11 +20,15 @@ import org.springframework.stereotype.Component;
  */
 
 @Slf4j
+@Component
 public class WsStarter {
 
     private NioEventLoopGroup boss;
     private NioEventLoopGroup work;
     private ChannelFuture channelFuture;
+
+    @Autowired
+    private WsHandler wsHandler;
 
     public void start(int port) {
         log.info("开始启动ws服务...");
@@ -40,7 +45,7 @@ public class WsStarter {
                             socketChannel.pipeline().addLast("http-codec", new HttpServerCodec());
                             socketChannel.pipeline().addLast("aggregator", new HttpObjectAggregator(65536));//聚合器，使用websocket会用到
                             socketChannel.pipeline().addLast("http-chunked", new ChunkedWriteHandler());//用于大数据的分区传输
-                            socketChannel.pipeline().addLast("handler", new WsHandler());//自定义的业务handler;
+                            socketChannel.pipeline().addLast("handler", wsHandler);//自定义的业务handler;
                         }
                     });
             channelFuture = bootstrap.bind(port).sync();

@@ -28,5 +28,5 @@ public class Session {
 
     private String token;
 
-    private List<String> chatMessageList;
+    private List<ChatMsg> chatMessageList;
 }

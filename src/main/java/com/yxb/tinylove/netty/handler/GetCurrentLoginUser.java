@@ -3,17 +3,17 @@ package com.yxb.tinylove.netty.handler;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yxb.tinylove.common.bean.Session;
-import com.yxb.tinylove.common.util.RandomNicknameUtil;
 import com.yxb.tinylove.common.util.SessionUtil;
-import com.yxb.tinylove.common.util.UUIDUtil;
 import com.yxb.tinylove.netty.protocol.resp.LoginUser;
+import com.yxb.tinylove.service.MsgService;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
-import java.util.Random;
 
 /**
  * @author yxb
@@ -21,7 +21,12 @@ import java.util.Random;
  */
 
 @Slf4j
+@Component
 public class GetCurrentLoginUser extends AbstractHandler {
+
+    @Autowired
+    private MsgService msgService;
+
     @Override
     public void exec(Channel channel, JSONObject req) {
         String token = req.getString("token");

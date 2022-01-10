@@ -18,6 +18,8 @@ public class MsgResp {
 
     private String username;
 
+    private String nickname;
+
     private Integer avatarIndex;
 
     private String avatar;
@@ -29,6 +31,8 @@ public class MsgResp {
     private String toUsername;
 
     private Long toUserId;
+
+    private String toNickname;
 
     /**
      * 消息类型， 1-个人消息 2-群消息

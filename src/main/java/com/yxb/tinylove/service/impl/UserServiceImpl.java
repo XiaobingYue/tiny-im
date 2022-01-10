@@ -3,6 +3,7 @@ package com.yxb.tinylove.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.yxb.tinylove.common.bean.LoginReq;
 import com.yxb.tinylove.common.bean.Session;
+import com.yxb.tinylove.common.util.Md5Util;
 import com.yxb.tinylove.common.util.SessionUtil;
 import com.yxb.tinylove.domain.User;
 import com.yxb.tinylove.dao.UserMapper;
@@ -27,9 +28,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Session login(LoginReq loginReq) {
         User user = this.queryByUsername(loginReq.getUsername());
-        Session session = SessionUtil.getSession(user);
-        SessionUtil.saveSession(session);
-        return session;
+        if (user.getPassword().equals(Md5Util.md5(loginReq.getPassword()))) {
+            Session session = SessionUtil.getSession(user);
+            SessionUtil.saveSession(session);
+            return session;
+        } else {
+            throw new ServiceException("用户名或密码不正确");
+        }
     }
 
     @Override

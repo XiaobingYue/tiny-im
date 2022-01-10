@@ -10,6 +10,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author yxb
@@ -42,6 +43,9 @@ public class LoginFilter implements Filter {
                 throw new ServiceException("票据信息空");
             }
             Session session = SessionUtil.getSession(token);
+            if (Objects.isNull(session)) {
+                throw new ServiceException("会话已过期，请重新登录");
+            }
             request.setAttribute(CURRENT_LOGIN_USER, session);
         }
         chain.doFilter(request, response);

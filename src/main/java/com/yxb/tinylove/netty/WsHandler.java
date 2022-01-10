@@ -11,10 +11,7 @@ import com.yxb.tinylove.netty.handler.*;
 import com.yxb.tinylove.netty.protocol.resp.LoginUser;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -22,6 +19,8 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -32,18 +31,20 @@ import static io.netty.handler.codec.http.HttpUtil.isKeepAlive;
  * @since 2021/12/15
  */
 @Slf4j
+@Component
+@ChannelHandler.Sharable
 public class WsHandler extends SimpleChannelInboundHandler<Object> {
 
     private WebSocketServerHandshaker handShaker;
 
     private final Map<Integer, AbstractHandler> handlerMap;
 
-    public WsHandler() {
+    public WsHandler(OnlineUserListHandler onlineUserListHandler, MsgHandler msgHandler, GetCurrentLoginUser getCurrentLoginUser, PingHandler pingHandler) {
         handlerMap = new HashMap<>();
-        handlerMap.put(1, new OnlineUserListHandler());
-        handlerMap.put(2, new MsgHandler());
-        handlerMap.put(3, new GetCurrentLoginUser());
-        handlerMap.put(6, new PingHandler());
+        handlerMap.put(1, onlineUserListHandler);
+        handlerMap.put(2, msgHandler);
+        handlerMap.put(3, getCurrentLoginUser);
+        handlerMap.put(6, pingHandler);
     }
 
     @Override
