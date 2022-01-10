@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,8 +45,8 @@ public class OnlineUserListHandler extends AbstractHandler {
             sessions.forEach(s -> {
                 Long userId = s.getUserId();
                 List<ChatMsg> chatMsgList = msgMap.get(userId).stream().sorted(Comparator.comparing(Msg::getCreateTime))
-                        .map(msg -> ChatMsg.builder().userId(s.getUserId()).username(s.getUsername()).nickName(s.getNickname())
-                                .toUserId(session.getUserId()).toUserName(session.getUsername()).toNickName(session.getNickname())
+                        .map(msg -> ChatMsg.builder().userId(s.getUserId()).username(s.getUsername()).nickname(s.getNickname())
+                                .toUserId(session.getUserId()).toUserName(session.getUsername()).toNickname(session.getNickname())
                                 .avatarIndex(s.getAvatarIndex()).self(msg.getUserId().equals(session.getUserId())).msg(msg.getMsg())
                                 .time(DateUtil.format(msg.getCreateTime(), DateUtil.PATTERN_M2S)).type(msg.getType()).build()).collect(Collectors.toList());
                 s.setChatMessageList(chatMsgList);

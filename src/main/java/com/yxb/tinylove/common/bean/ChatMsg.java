@@ -20,13 +20,13 @@ public class ChatMsg {
 
     private String username;
 
-    private String nickName;
+    private String nickname;
 
     private Long toUserId;
 
     private String toUserName;
 
-    private String toNickName;
+    private String toNickname;
 
     private Integer type;
 
