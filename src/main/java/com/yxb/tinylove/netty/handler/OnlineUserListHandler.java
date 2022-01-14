@@ -52,9 +52,12 @@ public class OnlineUserListHandler extends AbstractHandler {
             }
             sessions.forEach(s -> {
                 Long userId = s.getUserId();
-                List<ChatMsg> chatMsgList = msgMap.get(userId).stream().sorted(Comparator.comparing(Msg::getCreateTime))
-                        .map(msg -> ChatMsg.buildChat(msg, s, session)).collect(Collectors.toList());
-                s.setChatMessageList(chatMsgList);
+                List<Msg> list = msgMap.get(userId);
+                if (!CollectionUtils.isEmpty(list)) {
+                    List<ChatMsg> chatMsgList = list.stream().sorted(Comparator.comparing(Msg::getCreateTime))
+                            .map(msg -> ChatMsg.buildChat(msg, s, session)).collect(Collectors.toList());
+                    s.setChatMessageList(chatMsgList);
+                }
             });
         }
         Map<Long, List<ChatMsg>> chatMsgMap = msgService.queryMsgByGroupIds(Collections.singletonList(0L), session);
