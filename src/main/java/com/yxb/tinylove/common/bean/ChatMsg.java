@@ -50,7 +50,7 @@ public class ChatMsg {
                 .nickname(self ? loginSession.getNickname() : fromSession.getNickname())
                 .toUserId(self ? fromSession.getUserId() : loginSession.getUserId())
                 .toUserName(self ? fromSession.getUsername() : loginSession.getUsername())
-                .toNickName(self ? fromSession.getNickname() : loginSession.getNickname())
+                .toNickname(self ? fromSession.getNickname() : loginSession.getNickname())
                 .avatarIndex(self ? loginSession.getAvatarIndex() : fromSession.getAvatarIndex())
                 .self(self)
                 .msg(msg.getMsg())
