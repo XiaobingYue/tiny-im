@@ -30,7 +30,7 @@ public class ChatMsg {
 
     private String toUserName;
 
-    private String toNickName;
+    private String toNickname;
 
     private Integer type;
 
