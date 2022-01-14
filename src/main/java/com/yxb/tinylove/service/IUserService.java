@@ -18,4 +18,6 @@ public interface IUserService extends IService<User> {
     Session login(LoginReq loginReq);
 
     User queryByUsername(String username);
+
+    User queryById(Long userId);
 }

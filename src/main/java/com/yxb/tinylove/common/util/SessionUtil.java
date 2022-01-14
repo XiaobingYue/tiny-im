@@ -4,6 +4,7 @@ import com.yxb.tinylove.common.bean.Gender;
 import com.yxb.tinylove.common.bean.Session;
 import com.yxb.tinylove.domain.User;
 import com.yxb.tinylove.exception.ServiceException;
+import com.yxb.tinylove.filter.LoginFilter;
 import com.yxb.tinylove.netty.attribute.Attributes;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
@@ -11,11 +12,11 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -79,7 +80,7 @@ public class SessionUtil {
                 .phoneNum(user.getPhoneNum())
                 .avatarUrl(user.getAvatarUrl())
                 .token(UUIDUtil.randomUUID())
-                .avatarIndex(new Random().nextInt(14))
+                .avatarIndex(user.getAvatarUrl())
                 .chatMessageList(new ArrayList<>())
                 .build();
 
@@ -91,6 +92,11 @@ public class SessionUtil {
 
     public static Session getSession(String token) {
         return loginMap.get(token);
+    }
+
+    public static Session getSession() {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        return (Session) request.getAttribute(LoginFilter.CURRENT_LOGIN_USER);
     }
 
     public static String getToken(String authorization) {

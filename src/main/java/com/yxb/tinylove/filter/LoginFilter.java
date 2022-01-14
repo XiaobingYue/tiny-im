@@ -4,6 +4,7 @@ import com.yxb.tinylove.common.bean.Session;
 import com.yxb.tinylove.common.util.SessionUtil;
 import com.yxb.tinylove.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
@@ -18,7 +19,8 @@ import java.util.Objects;
  */
 
 @Slf4j
-@WebFilter(filterName = "loginFilter", urlPatterns = "/")
+@WebFilter(filterName = "loginFilter", urlPatterns = "/*")
+@Component
 public class LoginFilter implements Filter {
 
     private static final String PUBLIC = "/public";

@@ -22,7 +22,7 @@ public class Session {
 
     private String phoneNum;
 
-    private Integer avatarIndex;
+    private String avatarIndex;
 
     private String avatarUrl;
 

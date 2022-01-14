@@ -20,7 +20,7 @@ public class MsgResp {
 
     private String nickname;
 
-    private Integer avatarIndex;
+    private String avatarIndex;
 
     private String avatar;
 

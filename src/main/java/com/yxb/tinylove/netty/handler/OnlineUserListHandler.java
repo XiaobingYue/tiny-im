@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -38,23 +35,34 @@ public class OnlineUserListHandler extends AbstractHandler {
         Session session = SessionUtil.getSession(channel);
         List<Long> idList = sessions.stream().map(Session::getUserId).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(idList)) {
-            List<Msg> msgList = msgService.queryLatestMsgByUserIds(idList, session.getUserId());
+            // 好友聊天消息
+            List<Msg> msgList = msgService.queryMsgByUserIds(idList, session.getUserId());
             Map<Long, List<Msg>> msgMap = msgList.stream().collect(Collectors.groupingBy(Msg::getUserId));
             List<Msg> selfSendList = msgMap.get(session.getUserId());
             if (Objects.nonNull(selfSendList)) {
                 Map<Long, List<Msg>> selfMsgMap = selfSendList.stream().collect(Collectors.groupingBy(Msg::getToUserId));
-                selfMsgMap.forEach((userId, list) -> msgMap.get(userId).addAll(list));
+                selfMsgMap.forEach((userId, list) -> {
+                    if (msgMap.get(userId) == null) {
+                        msgMap.put(userId, list);
+                    } else {
+                        msgMap.get(userId).addAll(list);
+
+                    }
+                });
             }
             sessions.forEach(s -> {
                 Long userId = s.getUserId();
                 List<ChatMsg> chatMsgList = msgMap.get(userId).stream().sorted(Comparator.comparing(Msg::getCreateTime))
-                        .map(msg -> ChatMsg.builder().userId(s.getUserId()).username(s.getUsername()).nickName(s.getNickname())
-                                .toUserId(session.getUserId()).toUserName(session.getUsername()).toNickName(session.getNickname())
-                                .avatarIndex(s.getAvatarIndex()).self(msg.getUserId().equals(session.getUserId())).msg(msg.getMsg())
-                                .time(DateUtil.format(msg.getCreateTime(), DateUtil.PATTERN_M2S)).type(msg.getType()).build()).collect(Collectors.toList());
+                        .map(msg -> ChatMsg.buildChat(msg, s, session)).collect(Collectors.toList());
                 s.setChatMessageList(chatMsgList);
             });
         }
+        Map<Long, List<ChatMsg>> chatMsgMap = msgService.queryMsgByGroupIds(Collections.singletonList(0L), session);
+        sessions.add(0, Session.builder().userId(0L)
+                .username("chatRoom")
+                .nickname("聊天大厅")
+                .avatarIndex("chatRoom")
+                .chatMessageList(chatMsgMap.get(0L)).build());
         OnlineListResp onlineListResp = OnlineListResp.builder().userList(sessions).type(1).build();
         TextWebSocketFrame frame = new TextWebSocketFrame(JSON.toJSONString(onlineListResp));
         channel.writeAndFlush(frame);

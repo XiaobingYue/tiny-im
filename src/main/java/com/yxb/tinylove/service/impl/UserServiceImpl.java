@@ -1,6 +1,8 @@
 package com.yxb.tinylove.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.yxb.tinylove.common.bean.LoginReq;
 import com.yxb.tinylove.common.bean.Session;
 import com.yxb.tinylove.common.util.Md5Util;
@@ -25,6 +27,8 @@ import java.util.Objects;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
+    private static final Cache<Long, User> USER_CACHE = Caffeine.newBuilder().maximumSize(10000).build();
+
     @Override
     public Session login(LoginReq loginReq) {
         User user = this.queryByUsername(loginReq.getUsername());
@@ -44,5 +48,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new ServiceException("用户不存在");
         }
         return user;
+    }
+
+    @Override
+    public User queryById(Long userId) {
+        return USER_CACHE.get(userId, this::getById);
     }
 }
